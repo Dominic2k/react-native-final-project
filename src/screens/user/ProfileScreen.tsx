@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View,ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert, DeviceEventEmitter } from 'react-native';
-import { COLORS } from '../../constants/colors';
+import { COLORS, BORDER } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../../types/Objects';
 import { updateData } from '../../database/dbHelpers';
@@ -58,17 +58,17 @@ const ProfileScreen = () => {
     if (!user) return;
 
     if (oldPw !== user.password) {
-      Alert.alert("Sai mật khẩu", "Mật khẩu hiện tại không đúng");
+      Alert.alert("Wrong Password", "Current password is incorrect");
       return;
     }
 
     if (newPw.length < 4) {
-      Alert.alert("Lỗi", "Mật khẩu mới ít nhất 4 ký tự");
+      Alert.alert("Error", "New password must be at least 4 characters");
       return;
     }
 
     if (newPw !== confirmPw) {
-      Alert.alert("Lỗi", "Mật khẩu xác nhận không khớp");
+      Alert.alert("Error", "Password confirmation does not match");
       return;
     }
 
@@ -85,7 +85,7 @@ const ProfileScreen = () => {
       setNewPw("");
       setConfirmPw("");
       setShowForm(false);
-      Alert.alert("Thành công", "Đổi mật khẩu thành công");
+      Alert.alert("Success", "Password changed successfully");
     }catch(err:any){
       setErrorMessage(err.message || 'Unidentified error')
     }finally{
@@ -95,12 +95,12 @@ const ProfileScreen = () => {
 
   if (errorMessage) return <ErrorBlock message={errorMessage} onRetry={initScreen} />;
   
-  if (isLoading) return <LoadingSpiner visible={isLoading} text="Đang tải..." />;
+  if (isLoading) return <LoadingSpiner visible={isLoading} text="Loading..." />;
 
   if (!user) {
     return (
       <View style={styles.center}>
-        <Text style={{ fontSize: 16 }}>Không tìm thấy tài khoản</Text>
+        <Text style={{ fontSize: 16 }}>Account not found</Text>
       </View>
     );
   }
@@ -108,7 +108,7 @@ const ProfileScreen = () => {
   return (
     <ScrollView style={styles.container}>
 
-      <Text style={styles.title}>Thông tin tài khoản</Text>
+      <Text style={styles.title}>Account Information</Text>
 
       <View style={styles.card}>
         <View style={styles.row}>
@@ -123,24 +123,24 @@ const ProfileScreen = () => {
 
         <TouchableOpacity onPress={() => setShowForm(!showForm)}>
           <Text style={styles.changePwText}>
-            {showForm ? "Ẩn thay đổi mật khẩu" : "Thay đổi mật khẩu"}
+            {showForm ? "Hide Change Password" : "Change Password"}
           </Text>
         </TouchableOpacity>
 
         <View style={styles.row}>
-          <Text style={styles.label}>Vai trò:</Text>
+          <Text style={styles.label}>Role:</Text>
           <Text style={styles.value}>{user.role}</Text>
         </View>
       </View>
 
-      {/* FORM ĐỔI MẬT KHẨU */}
+      {/* CHANGE PASSWORD FORM */}
       {showForm && (
         <View style={styles.card}>
 
-          <Text style={styles.formTitle}>Đổi mật khẩu</Text>
+          <Text style={styles.formTitle}>Change Password</Text>
 
           <TextInput
-            placeholder="Mật khẩu hiện tại"
+            placeholder="Current Password"
             secureTextEntry
             style={styles.input}
             value={oldPw}
@@ -148,7 +148,7 @@ const ProfileScreen = () => {
           />
 
           <TextInput
-            placeholder="Mật khẩu mới"
+            placeholder="New Password"
             secureTextEntry
             style={styles.input}
             value={newPw}
@@ -156,7 +156,7 @@ const ProfileScreen = () => {
           />
 
           <TextInput
-            placeholder="Xác nhận mật khẩu mới"
+            placeholder="Confirm New Password"
             secureTextEntry
             style={styles.input}
             value={confirmPw}
@@ -164,7 +164,7 @@ const ProfileScreen = () => {
           />
 
           <TouchableOpacity style={styles.saveBtn} onPress={handleChangePassword}>
-            <Text style={styles.saveText}>Lưu thay đổi</Text>
+            <Text style={styles.saveText}>Save Changes</Text>
           </TouchableOpacity>
 
         </View>
@@ -172,12 +172,12 @@ const ProfileScreen = () => {
 
       {user.role === 'user' && (
         <TouchableOpacity style={styles.historyBtn} onPress={()=>navigation.navigate('HomeTab', { screen: 'History' })}>
-          <Text style={styles.logoutText}>Xem lịch sử đơn hàng</Text>
+          <Text style={styles.logoutText}>View Order History</Text>
         </TouchableOpacity>
       )
       }
       <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Đăng Xuất</Text>
+        <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
 
     </ScrollView>
@@ -207,14 +207,16 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: '#fff',
-    padding: 18,
-    borderRadius: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
+    backgroundColor: COLORS.CARD_BG,
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: COLORS.PRIMARY,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
     marginBottom: 25,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
 
   row: {
@@ -251,11 +253,14 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: '#f3f3f3',
-    padding: 12,
-    borderRadius: 10,
+    backgroundColor: COLORS.BACKGROUND_LIGHT,
+    padding: 14,
+    borderRadius: 12,
     marginBottom: 15,
     fontSize: 15,
+    color: COLORS.TEXT_PRIMARY,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
 
   saveBtn: {
@@ -273,10 +278,15 @@ const styles = StyleSheet.create({
   },
 
   logoutBtn: {
-    backgroundColor: COLORS.SECONDARY,
+    backgroundColor: COLORS.ERROR,
     paddingVertical: 15,
     borderRadius: 12,
     alignItems: 'center',
+    elevation: 4,
+    shadowColor: COLORS.ERROR,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
   },
   historyBtn: {
     backgroundColor: COLORS.PRIMARY,

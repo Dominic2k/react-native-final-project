@@ -60,8 +60,8 @@ export default function HistoryScreen(){
 
   return (
     <View style={styles.container}>
-      <LoadingSpiner visible={isLoading} text="Đang tải..." />
-      <Text style={styles.title}>📦 Lịch Sử Đơn Hàng</Text>
+      <LoadingSpiner visible={isLoading} text="Loading..." />
+      <Text style={styles.title}>📦 Order History</Text>
 
       {/* Status Tabs */}
       <View style={styles.statusRow}>
@@ -74,7 +74,7 @@ export default function HistoryScreen(){
 
       <ScrollView style={{marginTop:16}}>
         {filtered.length === 0 && (
-          <Text style={styles.emptyText}>Không có đơn hàng nào</Text>
+          <Text style={styles.emptyText}>No orders found</Text>
         )}
 
         {filtered.map(item=>{
@@ -85,8 +85,8 @@ export default function HistoryScreen(){
 
               <View style={{flex:1, marginLeft:12}}>
                 <Text style={styles.name}>{product?.name}</Text>
-                <Text style={styles.qty}>Số lượng: {item.qty}</Text>
-                <Text style={styles.total}>Tổng: {formatCurrency(item.totalPrice || (product?.price||0)*item.qty)}</Text>
+                <Text style={styles.qty}>Quantity: {item.qty}</Text>
+                <Text style={styles.total}>Total: {formatCurrency(item.totalPrice || (product?.price||0)*item.qty)}</Text>
               </View>
 
               <Text style={styles.statusLabel}>{item.status}</Text>

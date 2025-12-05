@@ -5,6 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BottomTabParamList } from '../types/Params';
 import HeaderMenu from './HeaderMenu';
+import { COLORS, BORDER } from '../constants/colors';
 const UserHeader = () => {
   const [user, setUser] = useState<{ username: string; role: string } | null>(null);
   const navigation = useNavigation<NativeStackNavigationProp<BottomTabParamList>>();
@@ -42,12 +43,12 @@ const UserHeader = () => {
         <>
           {user.username && user.role ? (
             <Text style={styles.userInfo}>
-              Xin chào, {String(user.username)} ({String(user.role)})
+              Hello, {String(user.username)} ({String(user.role)})
             </Text>
           ) : null}
 
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutText}>Đăng Xuất</Text>
+            <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </>
       ) : null}
@@ -60,21 +61,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 0,
-    backgroundColor: '#6200ea',
+    padding: 12,
+    backgroundColor: COLORS.BACKGROUND_LIGHT,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER.LIGHT,
   },
   userInfo: {
-    color: 'white',
-    fontSize: 16,
+    color: COLORS.TEXT_PRIMARY,
+    fontSize: 15,
+    fontWeight: '600',
   },
   logoutButton: {
-    backgroundColor: '#ff5252',
-    padding: 8,
-    borderRadius: 5,
+    backgroundColor: COLORS.ERROR,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: COLORS.ERROR,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   logoutText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: COLORS.TEXT_PRIMARY,
+    fontWeight: '700',
+    fontSize: 13,
   },
 });
 

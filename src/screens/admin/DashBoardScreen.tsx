@@ -8,10 +8,10 @@ import { COLORS } from '../../constants/colors';
 const { width } = Dimensions.get('window');
 
 const DASHBOARD_ITEMS = [
-  { id: '5', title: 'QL Đơn hàng', subtitle: 'Xử lý đơn đặt', screen: 'BookingManagement', icon: '📦', color: '#e3f2fd', textColor: '#1565c0' },
-  { id: '3', title: 'QL Sản phẩm', subtitle: 'Thêm/Sửa/Xóa', screen: 'ProductManagement', icon: '🍔', color: '#e8f5e9', textColor: '#2e7d32' },
-  { id: '2', title: 'QL Danh mục', subtitle: 'Phân loại món', screen: 'CategoryManagement', icon: '📂', color: '#fff3e0', textColor: '#ef6c00' },
-  { id: '4', title: 'QL Người dùng', subtitle: 'Khách hàng', screen: 'UserManagement', icon: '👥', color: '#f3e5f5', textColor: '#7b1fa2' },
+  { id: '5', title: 'Order Management', subtitle: 'Process orders', screen: 'BookingManagement', icon: '📦', color: '#e3f2fd', textColor: '#1565c0' },
+  { id: '3', title: 'Product Management', subtitle: 'Add/Edit/Delete', screen: 'ProductManagement', icon: '💻', color: '#e8f5e9', textColor: '#2e7d32' },
+  { id: '2', title: 'Category Management', subtitle: 'Classify products', screen: 'CategoryManagement', icon: '📂', color: '#fff3e0', textColor: '#ef6c00' },
+  { id: '4', title: 'User Management', subtitle: 'Customers', screen: 'UserManagement', icon: '👥', color: '#f3e5f5', textColor: '#7b1fa2' },
 ];
 
 const DashBoardScreen = () => {
@@ -19,7 +19,7 @@ const DashBoardScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Trang Quản Trị',
+      title: 'Admin Dashboard',
       headerRight: () => <HeaderMenu />,
       headerStyle: { backgroundColor: COLORS.PRIMARY },
       headerTintColor: '#fff',
@@ -35,10 +35,10 @@ const DashBoardScreen = () => {
   };
 
   const handleLogout = () => {
-    Alert.alert('Đăng xuất', 'Bạn muốn đăng xuất khỏi hệ thống?', [
-      { text: 'Hủy', style: 'cancel' },
+    Alert.alert('Logout', 'Do you want to logout from the system?', [
+      { text: 'Cancel', style: 'cancel' },
       {
-        text: 'Đăng xuất',
+        text: 'Logout',
         style: 'destructive',
         onPress: async () => {
           await AsyncStorage.removeItem('loggedInUser');
@@ -53,13 +53,13 @@ const DashBoardScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       
-      {/* Phần Header Chào mừng */}
+      {/* Welcome Header */}
       <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeText}>Xin chào, Admin! 👋</Text>
-        <Text style={styles.subText}>Chúc bạn một ngày làm việc hiệu quả.</Text>
+        <Text style={styles.welcomeText}>Hello, Admin! 👋</Text>
+        <Text style={styles.subText}>Have a productive day.</Text>
       </View>
 
-      {/* Phần Grid Menu */}
+      {/* Grid Menu */}
       <View style={styles.gridContainer}>
         {DASHBOARD_ITEMS.map((item) => (
           <TouchableOpacity
@@ -77,9 +77,9 @@ const DashBoardScreen = () => {
         ))}
       </View>
 
-      {/* Nút Đăng xuất riêng biệt */}
+      {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>🚪 Đăng xuất hệ thống</Text>
+        <Text style={styles.logoutText}>🚪 Logout</Text>
       </TouchableOpacity>
 
     </ScrollView>

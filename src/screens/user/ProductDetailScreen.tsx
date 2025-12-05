@@ -9,7 +9,7 @@ import {HomeStackParamList, BottomTabParamList} from '../../types/Params';
 import { getAllData, insertData, checkProductInOrder } from '../../database/dbHelpers';
 import ErrorBlock from '../../components/ErrorBlock';
 import LoadingSpiner from '../../components/LoadingSpiner';
-import { COLORS } from '../../constants/colors';
+import { COLORS, BORDER } from '../../constants/colors';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 type ProductDetailRouteProp = RouteProp<HomeStackParamList, 'Detail'>;
@@ -61,15 +61,15 @@ const ProductDetailScreen = () => {
 
   const addToCart = async () => {
     if(!user){
-      Alert.alert('Chưa đăng nhập', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!', [
-        { text: 'Hủy', style: 'cancel' },
-        { text: 'Đăng nhập', onPress: () => navigation.navigate('Login' as never) },
+      Alert.alert('Not Logged In', 'Please login to add products to cart!', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Login', onPress: () => navigation.navigate('Login' as never) },
       ]);
       return;
     }
     if(user.role === "admin"){
-      Alert.alert('Không có quyền', 'Vui lòng đăng nhập băn tài khoản user đẻ có thể thực hiện được tính năng!', [
-        { text: 'Ok' }
+      Alert.alert('No Permission', 'Please login with a user account to use this feature!', [
+        { text: 'OK' }
       ]);
       return;
     }
@@ -88,9 +88,9 @@ const ProductDetailScreen = () => {
         ];
         await insertData('orders', newOrder);
         Alert.alert(
-          'Xác nhận thêm thành công!',
-          'Thêm vào giỏ hàng thành công!',
-          [{text: 'Xem giỏ hàng', onPress: () => navigation.navigate('Cart' as never)},]
+          'Success!',
+          'Product added to cart successfully!',
+          [{text: 'View Cart', onPress: () => navigation.navigate('Cart' as never)},]
         );
     }catch (err: any){
         setErrorMessage(err.message || 'Unidentified error')
@@ -110,7 +110,7 @@ const ProductDetailScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <LoadingSpiner visible={isLoading} text="Đang khởi tạo..." />
+      <LoadingSpiner visible={isLoading} text="Loading..." />
 
       {/* Product Image */}
       <View style={styles.imageWrapper}>
@@ -130,7 +130,7 @@ const ProductDetailScreen = () => {
         {/* Quantity */}
         {!isInCart &&(
           <View style={styles.qtyRow}>
-            <Text style={styles.qtyLabel}>Số lượng:</Text>
+            <Text style={styles.qtyLabel}>Quantity:</Text>
             <View style={styles.qtyControl}>
               <TouchableOpacity 
                 style={styles.qtyButton}
@@ -152,12 +152,12 @@ const ProductDetailScreen = () => {
 
         {/* Buy Button */}
         <TouchableOpacity style={styles.buyButton} onPress={addToCart}>
-          <Text style={styles.buyButtonText}>{isInCart? 'Đến giỏ hàng' : 'Đặt Hàng'}</Text>
+          <Text style={styles.buyButtonText}>{isInCart? 'Go to Cart' : 'Add to Cart'}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Related Category */}
-      <Text style={styles.label}>Sản phẩm liên quan</Text>
+      <Text style={styles.label}>Related Products</Text>
 
       <CategorySelector
         categories={categories} 
@@ -176,14 +176,16 @@ const styles = StyleSheet.create({
 
   /* IMAGE */
   imageWrapper: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.CARD_BG,
     borderRadius: 16,
     padding: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
+    shadowColor: COLORS.PRIMARY,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 6,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
   image: { 
     width: '100%', 
@@ -194,14 +196,16 @@ const styles = StyleSheet.create({
 
   /* CARD INFO */
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.CARD_BG,
     borderRadius: 16,
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: COLORS.PRIMARY,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
 
   name: { 
@@ -235,27 +239,27 @@ const styles = StyleSheet.create({
   qtyControl: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f4f4f4',
+    backgroundColor: COLORS.BACKGROUND_LIGHT,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
 
   qtyButton: {
-    width: 35,
-    height: 35,
+    width: 36,
+    height: 36,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.PRIMARY,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
   },
 
   qtyButtonText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#444',
+    color: COLORS.TEXT_PRIMARY,
   },
 
   qtyValue: {
@@ -270,10 +274,15 @@ const styles = StyleSheet.create({
   /* BUY BUTTON */
   buyButton: {
     backgroundColor: COLORS.PRIMARY,
-    paddingVertical: 14,
+    paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
+    elevation: 4,
+    shadowColor: COLORS.PRIMARY,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
   },
   buyButtonText: {
     color: COLORS.TEXT_PRIMARY,

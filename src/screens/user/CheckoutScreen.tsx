@@ -36,11 +36,11 @@ export default function CheckoutScreen() {
           const productData = await getAllData("products");    
           const currentProduct = productData.find((p: Product) => p.id === order.productId) || null;
           if(!currentProduct){
-            throw new Error("Sản phẩm không tồn tại");
+            throw new Error("Product not found");
           }
           setProduct(currentProduct);
         }else{
-          throw new Error("Chưa đăng nhập");
+          throw new Error("Not logged in");
         }
     }catch (err: any){
         setErrorMessage(err.message || 'Unidentified error');
@@ -56,10 +56,10 @@ export default function CheckoutScreen() {
   );
 
   const confirmCheckout = async () => {
-    Alert.alert("Xác nhận thanh toán", "Bạn có chắc muốn đặt hàng?", [
-      { text: "Hủy", style: "cancel" },
+    Alert.alert("Confirm Payment", "Are you sure you want to place this order?", [
+      { text: "Cancel", style: "cancel" },
       {
-        text: "Đặt hàng",
+        text: "Place Order",
         onPress: async () => {
           try {
               setIsLoading(true);
@@ -68,7 +68,7 @@ export default function CheckoutScreen() {
                 { field: "status", newValue: "pending" },
                 { field: "totalPrice", newValue: product?.price ? product.price * order.qty: null },
               ]);
-            Alert.alert("✔️ Thành công", "Đơn hàng của bạn đã được đặt!",[{ text: "OK", onPress: ()=>navigation.navigate('History')}]);
+            Alert.alert("✔️ Success", "Your order has been placed!",[{ text: "OK", onPress: ()=>navigation.navigate('History')}]);
           } catch (err:any) {
             setErrorMessage(err.message || 'Unidentified error');
           }finally{
@@ -83,25 +83,25 @@ export default function CheckoutScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>💳 Xác Nhận Thanh Toán</Text>
-      <LoadingSpiner visible={isLoading} text="Đang tải..." />
+      <Text style={styles.title}>💳 Confirm Payment</Text>
+      <LoadingSpiner visible={isLoading} text="Loading..." />
       <View style={styles.card}>
         <Image source={{ uri: product?.image }} style={styles.image} />
         <View style={{ flex: 1 }}>
           <Text style={styles.productName}>{product?.name}</Text>
           <Text style={styles.price}>{formatCurrency(product?.price)}</Text>
-          <Text style={styles.qty}>Số lượng: {order?.qty}</Text>
+          <Text style={styles.qty}>Quantity: {order?.qty}</Text>
         </View>
         <Text style={styles.totalItem}>{product?.price  && formatCurrency(product.price * order.qty)}</Text>
       </View>
 
       <View style={styles.summaryBox}>
-        <Text style={styles.summaryText}>Tổng thanh toán:</Text>
+        <Text style={styles.summaryText}>Total Payment:</Text>
         <Text style={styles.summaryPrice}>{product?.price  && formatCurrency(product.price * order.qty)}</Text>
       </View>
 
       <TouchableOpacity style={styles.payButton} onPress={confirmCheckout}>
-        <Text style={styles.payText}>Thanh toán</Text>
+        <Text style={styles.payText}>Pay Now</Text>
       </TouchableOpacity>
     </ScrollView>
   );

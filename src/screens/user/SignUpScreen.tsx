@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {  BottomTabParamList} from '../../types/Params';
 import ErrorBlock from '../../components/ErrorBlock';
 import LoadingSpiner from '../../components/LoadingSpiner';
+import { COLORS, BORDER } from '../../constants/colors';
 
 const SignUpScreen = () => {
   const [username, setUsername] = useState('');
@@ -18,11 +19,11 @@ const SignUpScreen = () => {
 
   const handleSignup = async () => {
     if (!username || !password) {
-      Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin!');
+      Alert.alert('Error', 'Please fill in all fields!');
       return;
     }
     if (username.length <5 || password.length <5) {
-      Alert.alert('Lỗi', 'Vui lòng nhập ít nhất 6 ký tự cho các trường!');
+      Alert.alert('Error', 'Please enter at least 6 characters for each field!');
       return;
     }
     try {
@@ -30,7 +31,7 @@ const SignUpScreen = () => {
       setErrorMessage('');
       const userExists = await checkUserExists(username);
       if (userExists) {
-        Alert.alert('Lỗi', 'Tên đăng nhập đã tồn tại!');
+        Alert.alert('Error', 'Username already exists!');
         return;
       }
       const users = await getAllData('users');
@@ -42,7 +43,7 @@ const SignUpScreen = () => {
       ];
       
       await insertData('users', newUser);
-      Alert.alert('Thành công', 'Đăng ký thành công!', [
+      Alert.alert('Success', 'Registration successful!', [
         { text: 'OK', onPress: () => navigation.navigate('Login') },
       ]);
 
@@ -64,30 +65,38 @@ const SignUpScreen = () => {
 
   return (
     <View style={styles.container}>
-      <LoadingSpiner visible={isLoading} text="Đang khởi tạo..." />
-      <Text style={styles.title}>Đăng Ký</Text>
-      <TextInput
-        placeholder="Tên đăng nhập"
-        style={styles.input}
-        onChangeText={setUsername}
-        value={username}
-      />
+      <View style={styles.header}>
+        <Text style={styles.icon}>💻</Text>
+        <Text style={styles.title}>TechStore</Text>
+        <Text style={styles.subtitle}>Sign Up</Text>
+      </View>
+      <LoadingSpiner visible={isLoading} text="Loading..." />
+      <View style={styles.form}>
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor={COLORS.TEXT_SECONDARY}
+          style={styles.input}
+          onChangeText={setUsername}
+          value={username}
+        />
 
-      <TextInput
-        placeholder="Mật khẩu"
-        style={styles.input}
-        secureTextEntry
-        onChangeText={setPassword}
-        value={password}
-      />
+        <TextInput
+          placeholder="Password"
+          placeholderTextColor={COLORS.TEXT_SECONDARY}
+          style={styles.input}
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Đăng Ký</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.switchText}>Đã có tài khoản? Đăng nhập ngay</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.switchText}>Already have an account? Login now</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -97,34 +106,67 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20 
+    padding: 20,
+    backgroundColor: COLORS.BACKGROUND,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  icon: {
+    fontSize: 64,
+    marginBottom: 16,
   },
   title: { 
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20 
+    fontSize: 32,
+    fontWeight: '800',
+    color: COLORS.TEXT_PRIMARY,
+    marginBottom: 8,
+    letterSpacing: 1,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: COLORS.TEXT_SECONDARY,
+    fontWeight: '500',
+  },
+  form: {
+    width: '100%',
+    maxWidth: 400,
   },
   input: { 
     width: '100%',
-    padding: 10,
+    padding: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 10 
+    borderColor: BORDER.LIGHT,
+    borderRadius: 12,
+    marginBottom: 16,
+    backgroundColor: COLORS.CARD_BG,
+    color: COLORS.TEXT_PRIMARY,
+    fontSize: 16,
   },
   button: { 
-    backgroundColor: '#6200ea',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10 
+    backgroundColor: COLORS.PRIMARY,
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 8,
+    elevation: 4,
+    shadowColor: COLORS.PRIMARY,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
   },
   buttonText: { 
-    color: 'white',
-    fontWeight: 'bold' 
+    color: COLORS.TEXT_PRIMARY,
+    fontWeight: '700',
+    fontSize: 16,
+    textAlign: 'center',
   },
   switchText: { 
-    marginTop: 15,
-    color: '#6200ea' 
+    marginTop: 20,
+    color: COLORS.SECONDARY,
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
 

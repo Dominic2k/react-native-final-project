@@ -7,79 +7,105 @@ import SignUpScreen from '../screens/user/SignUpScreen';
 import LogInScreen from '../screens/user/LogInScreen';
 import { BottomTabParamList } from '../types/Params';
 import ProfileScreen from '../screens/user/ProfileScreen';
-import CartScreen from '../screens/user/CartScreen';  
+import CartScreen from '../screens/user/CartScreen';
+import { COLORS, BORDER } from '../constants/colors';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-const TabButton = ({userRole}:{userRole:string}) => {
+const TabButton = ({ userRole }: { userRole: string }) => {
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName='HomeTab'
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: COLORS.CARD_BG,
+          borderTopWidth: 1,
+          borderTopColor: BORDER.LIGHT,
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarActiveTintColor: COLORS.PRIMARY,
+        tabBarInactiveTintColor: COLORS.TEXT_SECONDARY,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
+      }}
+      initialRouteName="HomeTab"
     >
       <Tab.Screen
         name="HomeTab"
         component={AppNavigatorHome as React.ComponentType<any>}
-        options={{ title: 'Home',
+        options={{
+          title: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>🏠</Text>
+            <Text style={{ fontSize: size + 4, color }}>🏠</Text>
           ),
-         }}
+        }}
       />
       <Tab.Screen
         name="AdminTab"
         component={AppNavigatorAdmin as React.ComponentType<any>}
-        options={{ title: 'Admin',
+        options={{
+          title: 'Admin',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>🏠</Text>
+            <Text style={{ fontSize: size + 4, color }}>⚙️</Text>
           ),
           tabBarButton: userRole === 'admin' ? undefined : () => null,
-          tabBarItemStyle: userRole === 'admin' ? undefined : { display: 'none' },
+          tabBarItemStyle:
+            userRole === 'admin' ? undefined : { display: 'none' },
         }}
       />
       <Tab.Screen
         name="Cart"
         component={CartScreen}
-        options={{ title: 'Cart',
+        options={{
+          title: 'Cart',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>🛒</Text>
+            <Text style={{ fontSize: size + 4, color }}>🛒</Text>
           ),
-          tabBarButton: (userRole && userRole === 'user') ? undefined : ()=>null,
-          tabBarItemStyle: (userRole && userRole === 'user') ? undefined : { display: 'none' } ,
-         }}
+          tabBarButton:
+            userRole && userRole === 'user' ? undefined : () => null,
+          tabBarItemStyle:
+            userRole && userRole === 'user' ? undefined : { display: 'none' },
+        }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ title: 'Profile',
+        options={{
+          title: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>👤</Text>
+            <Text style={{ fontSize: size + 4, color }}>👤</Text>
           ),
-          tabBarButton: userRole ? undefined : ()=>null,
-          tabBarItemStyle: userRole ? undefined : { display: 'none' } ,
-         }}
+          tabBarButton: userRole ? undefined : () => null,
+          tabBarItemStyle: userRole ? undefined : { display: 'none' },
+        }}
       />
       <Tab.Screen
         name="Login"
         component={LogInScreen}
-        options={{ title: 'Login',
+        options={{
+          title: 'Login',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>🔒</Text>
+            <Text style={{ fontSize: size + 4, color }}>🔐</Text>
           ),
-          tabBarButton: userRole ? ()=>null : undefined,
-          tabBarItemStyle: userRole ? { display: 'none' } : undefined ,
-         }}
+          tabBarButton: userRole ? () => null : undefined,
+          tabBarItemStyle: userRole ? { display: 'none' } : undefined,
+        }}
       />
       <Tab.Screen
         name="Signup"
         component={SignUpScreen}
-        options={{ title: 'Signup',
+        options={{
+          title: 'Sign Up',
           tabBarIcon: ({ color, size }) => (
-            <Text style={{ fontSize: size, color }}>➕</Text> 
+            <Text style={{ fontSize: size + 4, color }}>📝</Text>
           ),
-          tabBarButton: userRole ? ()=>null : undefined,
-          tabBarItemStyle: userRole ? { display: 'none' } : undefined ,
-         }}
+          tabBarButton: userRole ? () => null : undefined,
+          tabBarItemStyle: userRole ? { display: 'none' } : undefined,
+        }}
       />
     </Tab.Navigator>
   );

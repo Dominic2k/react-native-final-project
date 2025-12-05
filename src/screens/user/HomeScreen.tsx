@@ -51,20 +51,17 @@ const HomeScreen= ({ navigation }: HomeScreenProps) => {
 
   return (
     <ScrollView style={styles.container}>
-      <LoadingSpiner visible={isLoading} text="Đang khởi tạo..." />
+      <LoadingSpiner visible={isLoading} text="Loading..." />
       {/* Banner */}
-        <Image style={styles.banner} source={require('../../assets/banner/image.png')} />
+        <Image style={styles.banner} source={require('../../assets/banner/image.jpg')} />
       {/* Menu ngang */}
       <Header/>
       <View style={styles.menuContainer}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.menuText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('About')}>
-          <Text style={styles.menuText}>Giới thiệu</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Products',{categoryId: undefined})}>
-          <Text style={styles.menuText}>Danh mục sản phẩm</Text>
+          <Text style={styles.menuText}>Products</Text>
         </TouchableOpacity>
       </View>
       {/* hiển thị ra danh sách sản phẩm tĩnh với hình ảnh lấy ngẫu nhiên*/}
@@ -73,6 +70,7 @@ const HomeScreen= ({ navigation }: HomeScreenProps) => {
         data={products}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
+        columnWrapperStyle={styles.row}
         renderItem={ ({item})=>(
           <ProductCard  item={item}/>
         )
@@ -92,29 +90,33 @@ const styles = StyleSheet.create({
   /* --- BANNER --- */
   banner: {
     width: '100%',
-    height: 160,
+    height: 180,
     resizeMode: 'cover',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    opacity: 0.9,
   },
 
   /* --- MENU NGANG --- */
   menuContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    marginTop: 5,
-    borderRadius: 12,
+    backgroundColor: COLORS.CARD_BG,
+    paddingVertical: 12,
+    marginTop: 8,
+    borderRadius: 14,
     marginHorizontal: 10,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
+    elevation: 6,
+    shadowColor: COLORS.PRIMARY,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
   menuItem: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
   },
   menuText: {
     fontSize: 14,
@@ -127,6 +129,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 10,
     paddingBottom: 40,
+  },
+  row: {
+    justifyContent: 'space-between',
   },
 });
 

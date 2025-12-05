@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Category } from '../types/Objects';
+import { COLORS, BORDER } from '../constants/colors';
 
 interface Props {
   categories: Category[];
@@ -20,7 +21,7 @@ const CategorySelector = ({ categories, selectedId, onSelect }: Props) => {
           onSelect(undefined);
         }}
       >
-        <Text style={[styles.text,selectedId === undefined && styles.selectedText]}> Tất cả</Text>
+        <Text style={[styles.text,selectedId === undefined && styles.selectedText]}> All</Text>
       </TouchableOpacity>
       {categories.map((cat) => (
         <TouchableOpacity
@@ -46,27 +47,37 @@ const styles = StyleSheet.create({
   container: { 
     flexDirection: 'row', 
     flexWrap: 'wrap', 
-    marginTop: 10 
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
   button: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#ccc', // Nền màu xám cho nút chưa chọn
-    borderRadius: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: COLORS.BACKGROUND_LIGHT,
+    borderRadius: 10,
     margin: 5,
-    minWidth: 80, // Chiều rộng tối thiểu cho nút
+    minWidth: 90,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
   selectedButton: {
-    backgroundColor: '#007bff', // Nền màu xanh dương nổi bật cho nút đang chọn
+    backgroundColor: COLORS.PRIMARY,
+    borderColor: COLORS.PRIMARY,
+    elevation: 4,
+    shadowColor: COLORS.PRIMARY,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
   },
   text: {
-    color: '#000', // Màu chữ mặc định
-    fontWeight: 'normal',
+    color: COLORS.TEXT_SECONDARY,
+    fontWeight: '500',
+    fontSize: 14,
   },
   selectedText: {
-    color: '#fff', // Màu chữ trắng khi nút được chọn
-    fontWeight: 'bold',
+    color: COLORS.TEXT_PRIMARY,
+    fontWeight: '700',
   }
 });
 

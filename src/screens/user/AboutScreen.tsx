@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Linking } 
 import { COLORS } from '../../constants/colors'; 
 
 const APP_INFO = {
-  name: "FoodLink", 
+  name: "TechStore", 
   version: "1.0.0",
-  description: "Ứng dụng đặt món ăn và mua sắm trực tuyến hàng đầu. Chúng tôi kết nối bạn với những cửa hàng uy tín nhất, mang đến bữa ăn ngon và sản phẩm chất lượng ngay trước cửa nhà bạn.",
-  email: "support@foodlink.com",
+  description: "Leading technology product shopping app. We connect you with the most trusted stores, bringing quality tech products right to your doorstep.",
+  email: "support@techstore.com",
   phone: "1900 123 456",
-  website: "https://foodlink.com",
-  address: "123 Đường Nguyễn Văn Linh, Đà Nẵng, Việt Nam"
+  website: "https://techstore.com",
+  address: "123 Tech Street, San Francisco, USA"
 };
 
 export default function AboutScreen() {
@@ -29,12 +29,12 @@ export default function AboutScreen() {
             style={styles.logo} 
           />
           <Text style={styles.appName}>{APP_INFO.name}</Text>
-          <Text style={styles.version}>Phiên bản {APP_INFO.version}</Text>
+          <Text style={styles.version}>Version {APP_INFO.version}</Text>
         </View>
 
         {/* 2. Description */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Về Chúng Tôi</Text>
+          <Text style={styles.sectionTitle}>About Us</Text>
           <Text style={styles.descriptionText}>
             {APP_INFO.description}
           </Text>
@@ -44,21 +44,21 @@ export default function AboutScreen() {
         <View style={styles.featuresRow}>
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>🚀</Text>
-            <Text style={styles.featureText}>Giao Nhanh</Text>
+            <Text style={styles.featureText}>Fast Delivery</Text>
           </View>
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>🛡️</Text>
-            <Text style={styles.featureText}>Uy Tín</Text>
+            <Text style={styles.featureText}>Trusted</Text>
           </View>
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>🎧</Text>
-            <Text style={styles.featureText}>Hỗ Trợ 24/7</Text>
+            <Text style={styles.featureText}>24/7 Support</Text>
           </View>
         </View>
 
         {/* 4. Contact Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Liên Hệ</Text>
+          <Text style={styles.sectionTitle}>Contact</Text>
           
           <TouchableOpacity style={styles.contactRow} onPress={() => handleLink(`tel:${APP_INFO.phone}`)}>
             <Text style={styles.contactIcon}>📞</Text>
@@ -79,7 +79,7 @@ export default function AboutScreen() {
           <View style={styles.contactRow}>
             <Text style={styles.contactIcon}>🏢</Text>
             <View>
-              <Text style={styles.contactLabel}>Địa chỉ</Text>
+              <Text style={styles.contactLabel}>Address</Text>
               <Text style={styles.contactValue}>{APP_INFO.address}</Text>
             </View>
           </View>

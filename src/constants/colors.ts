@@ -1,18 +1,27 @@
 export const COLORS = {
-    PRIMARY: '#A2D2FF',
-    SECONDARY: '#FFB7C5',
-    BACKGROUND: '#F3F4F6',
-    TEXT_PRIMARY: '#111827',
-    TEXT_SECONDARY: '#6B7280',
-    PRICE: '#ff0000ff',
-    ERROR: '#EF4444',
+    PRIMARY: '#0066FF',
+    SECONDARY: '#00D4FF',
+    ACCENT: '#7B61FF',
+    BACKGROUND: '#0A0E27',
+    BACKGROUND_LIGHT: '#1A1F3A',
+    CARD_BG: '#1E2338',
+    TEXT_PRIMARY: '#FFFFFF',
+    TEXT_SECONDARY: '#A0A5B8',
+    PRICE: '#00FF88',
+    ERROR: '#FF4757',
+    SUCCESS: '#00FF88',
+    GRADIENT_START: '#0066FF',
+    GRADIENT_END: '#7B61FF',
 }
 export const FONT_SIZE = {
     PRIMARY: 14,
     SECONDARY: 12,
+    LARGE: 20,
+    XLARGE: 24,
 }
 export const BORDER ={
-    PRIMARY: '#68b6ffff',
-    SECONDARY: '#ff9bafff',
-    DARK: 'black',
+    PRIMARY: '#0066FF',
+    SECONDARY: '#00D4FF',
+    DARK: '#0A0E27',
+    LIGHT: '#2A2F4A',
 }

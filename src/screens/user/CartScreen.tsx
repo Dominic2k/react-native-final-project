@@ -5,7 +5,7 @@ import { getAllData, updateData ,selectOrder, deleteData} from "../../database/d
 import { Product, Order } from "../../types/Objects";
 import ErrorBlock from "../../components/ErrorBlock";
 import LoadingSpiner from "../../components/LoadingSpiner";
-import { COLORS } from "../../constants/colors";
+import { COLORS, BORDER } from "../../constants/colors";
 import { formatCurrency } from "../../utils/formatCurrency";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation } from '@react-navigation/native'; 
@@ -33,11 +33,11 @@ export default function CartScreen() {
         setOrders(ordersData); 
       } else{ 
         Alert.alert(
-            'Chưa đăng nhập', 
-            'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!', 
+            'Not Logged In', 
+            'Please login to add products to cart!', 
             [ 
-                { text: 'Hủy', style: 'cancel' }, 
-                { text: 'Đăng nhập', onPress: () => navigation.navigate('Login' as never) }, 
+                { text: 'Cancel', style: 'cancel' }, 
+                { text: 'Login', onPress: () => navigation.navigate('Login' as never) }, 
             ]
         );
       }
@@ -81,9 +81,9 @@ export default function CartScreen() {
   };
 
   const deleteCart = async (id:number)=>{
-    Alert.alert("Xác nhận xóa","Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?",[
-      {text: "Hủy", style: "cancel"},
-      {text: "Xóa",
+    Alert.alert("Confirm Delete","Are you sure you want to remove this product from cart?",[
+      {text: "Cancel", style: "cancel"},
+      {text: "Delete",
         onPress: async()=>{
           try{
             setIsLoading(true);
@@ -115,12 +115,15 @@ export default function CartScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <LoadingSpiner visible={isLoading} text="Đang tải..." />
+      <LoadingSpiner visible={isLoading} text="Loading..." />
 
-      <Text style={styles.title}>🛒 Giỏ hàng của bạn</Text>
+      <View style={styles.header}>
+        <Text style={styles.icon}>🛒</Text>
+        <Text style={styles.title}>Your Cart</Text>
+      </View>
 
       {orders.length === 0 && (
-        <Text style={styles.empty}>Giỏ hàng của bạn đang trống</Text>
+        <Text style={styles.empty}>Your cart is empty</Text>
       )}
 
       {orders.map((item) => {
@@ -154,16 +157,16 @@ export default function CartScreen() {
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.total}>Tổng: {formatCurrency(total)}</Text>
+                <Text style={styles.total}>Total: {formatCurrency(total)}</Text>
               </View>
 
               <View style={{ flexDirection: 'column', alignItems: 'flex-end', marginLeft: 8 }}>
                 <TouchableOpacity style={styles.buyButton} onPress={()=>order(item.id)}>
-                  <Text style={styles.buyButtonText}>Đặt</Text>
+                  <Text style={styles.buyButtonText}>Order</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.deleteButton} onPress={()=>{deleteCart(item.id)}}>
-                  <Text style={styles.deleteButtonText}>Xóa</Text>
+                  <Text style={styles.deleteButtonText}>Delete</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -180,11 +183,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BACKGROUND,
     padding: 16,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER.LIGHT,
+  },
+  icon: {
+    fontSize: 28,
+    marginRight: 12,
+  },
   title: {
     fontSize: 24,
     fontWeight: "800",
-    marginBottom: 16,
-    color: COLORS.PRIMARY,
+    color: COLORS.TEXT_PRIMARY,
   },
   empty: {
     textAlign: "center",
@@ -195,15 +209,17 @@ const styles = StyleSheet.create({
 
   card: {
     flexDirection: "row",
-    backgroundColor: "white",
-    padding: 14,
-    borderRadius: 18,
+    backgroundColor: COLORS.CARD_BG,
+    padding: 16,
+    borderRadius: 16,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowColor: COLORS.PRIMARY,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: BORDER.LIGHT,
   },
 
   image: {
@@ -237,12 +253,12 @@ const styles = StyleSheet.create({
   },
 
   qtyBtn: {
-    width: 34,
-    height: 34,
+    width: 36,
+    height: 36,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.SECONDARY,
+    backgroundColor: COLORS.PRIMARY,
   },
 
   qtyText: {
@@ -279,10 +295,15 @@ const styles = StyleSheet.create({
 
   deleteButton: {
     marginTop: 8,
-    backgroundColor: COLORS.SECONDARY,
+    backgroundColor: COLORS.ERROR,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 12,
+    elevation: 2,
+    shadowColor: COLORS.ERROR,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   deleteButtonText: {
     color: COLORS.TEXT_PRIMARY,

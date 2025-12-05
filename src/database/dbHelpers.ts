@@ -84,6 +84,28 @@ export const getAllData  = async(tableName: string): Promise<any[]> => {
     }
 };
 
+export const getProductsByCategoryId = async (categoryId: number): Promise<any[]> => {
+  try {
+    const db = await getDb();
+
+    const query = `SELECT * FROM products WHERE categoryId = ?`;
+
+    const [results] = await db.executeSql(query, [categoryId]);
+    const rows = results.rows;
+    const data: any[] = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      data.push(rows.item(i));
+    }
+
+    console.log(`✅ Selected ${data.length} products for categoryId ${categoryId}`);
+    return data;
+  } catch (err) {
+    console.error('❌ Error selecting products by category:', err);
+    throw err;
+  }
+};
+
 export const searchProductsByNameOrCategory = async (keyword: string) => {
   try {
     const db = await getDb();
