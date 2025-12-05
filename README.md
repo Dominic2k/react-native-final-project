@@ -124,5 +124,7 @@ yarn ios
   2. Bỏ comment các dòng `DROP TABLE ...`.
   3. Chạy lại ứng dụng một lần.
   4. Sau khi ứng dụng đã chạy, **comment lại** các dòng đó để tránh việc xóa dữ liệu ở các lần khởi động sau.
+ 
+  Copyright © 2025 Pham Duc Dat. All Rights Reserved.
 
 
