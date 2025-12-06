@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { insertData, checkUserExists, getAllData } from '../../database/dbHelpers';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import {
+  insertData,
+  checkUserExists,
+  getAllData,
+} from '../../database/dbHelpers';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import {  BottomTabParamList} from '../../types/Params';
+import { BottomTabParamList } from '../../types/Params';
 import ErrorBlock from '../../components/ErrorBlock';
 import LoadingSpiner from '../../components/LoadingSpiner';
 import { COLORS, BORDER } from '../../constants/colors';
@@ -12,54 +23,99 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
-  const [isLoading, setIsLoading]= useState<boolean>(false);
-  const [errorMessage, setErrorMessage]= useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const navigation = useNavigation<NativeStackNavigationProp<BottomTabParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<BottomTabParamList>>();
 
   const handleSignup = async () => {
-    if (!username || !password) {
+    // Reset lỗi trước khi validate
+    setErrorMessage('');
+
+    // Trim để tránh ký tự trắng đầu/cuối
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    // --- Validate username ---
+    if (!trimmedUsername || !trimmedPassword) {
       Alert.alert('Error', 'Please fill in all fields!');
       return;
     }
-    if (username.length <5 || password.length <5) {
-      Alert.alert('Error', 'Please enter at least 6 characters for each field!');
+
+    // Không để khoảng trắng
+    if (/\s/.test(trimmedUsername)) {
+      Alert.alert('Error', 'Username cannot contain spaces!');
       return;
     }
+
+    // Username chỉ gồm chữ và số
+    if (!/^[A-Za-z0-9]+$/.test(trimmedUsername)) {
+      Alert.alert('Error', 'Username can only contain letters and numbers!');
+      return;
+    }
+
+    if (trimmedUsername.length < 5) {
+      Alert.alert('Error', 'Username must be at least 5 characters!');
+      return;
+    }
+
+    // --- Validate password ---
+    if (trimmedPassword.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters!');
+      return;
+    }
+
+    // Password mạnh hơn (ít nhất 1 hoa, 1 thường, 1 số)
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!strongPasswordRegex.test(trimmedPassword)) {
+      Alert.alert(
+        'Weak Password',
+        'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number.',
+      );
+      return;
+    }
+
+    if (trimmedPassword.toLowerCase().includes(trimmedUsername.toLowerCase())) {
+      Alert.alert('Error', 'Password cannot contain your username!');
+      return;
+    }
+
     try {
       setIsLoading(true);
-      setErrorMessage('');
-      const userExists = await checkUserExists(username);
+
+      const userExists = await checkUserExists(trimmedUsername);
       if (userExists) {
         Alert.alert('Error', 'Username already exists!');
         return;
       }
+
       const users = await getAllData('users');
-      const newUser= [
-          {field: 'id', newValue: users.length > 0 ? users[users.length -1].id +1 : 1},
-          {field: 'username', newValue: username},
-          {field: 'password', newValue: password},
-          {field: 'role', newValue: role},
+      const newUser = [
+        {
+          field: 'id',
+          newValue: users.length > 0 ? users[users.length - 1].id + 1 : 1,
+        },
+        { field: 'username', newValue: trimmedUsername },
+        { field: 'password', newValue: trimmedPassword },
+        { field: 'role', newValue: role },
       ];
-      
+
       await insertData('users', newUser);
+
       Alert.alert('Success', 'Registration successful!', [
         { text: 'OK', onPress: () => navigation.navigate('Login') },
       ]);
-
-    } catch (error:any) {
-      setErrorMessage(error.message || 'Unidentified error')
-    }finally{
+    } catch (error: any) {
+      setErrorMessage(error.message || 'Unidentified error');
+    } finally {
       setIsLoading(false);
     }
   };
 
   if (errorMessage) {
     return (
-    <ErrorBlock 
-        message={errorMessage} 
-        onRetry={() => setErrorMessage('')}
-    />
+      <ErrorBlock message={errorMessage} onRetry={() => setErrorMessage('')} />
     );
   }
 
@@ -94,7 +150,9 @@ const SignUpScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.switchText}>Already have an account? Login now</Text>
+          <Text style={styles.switchText}>
+            Already have an account? Login now
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -102,7 +160,7 @@ const SignUpScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -117,7 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 64,
     marginBottom: 16,
   },
-  title: { 
+  title: {
     fontSize: 32,
     fontWeight: '800',
     color: COLORS.TEXT_PRIMARY,
@@ -133,7 +191,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
   },
-  input: { 
+  input: {
     width: '100%',
     padding: 16,
     borderWidth: 1,
@@ -144,7 +202,7 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT_PRIMARY,
     fontSize: 16,
   },
-  button: { 
+  button: {
     backgroundColor: COLORS.PRIMARY,
     padding: 16,
     borderRadius: 12,
@@ -155,13 +213,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
   },
-  buttonText: { 
+  buttonText: {
     color: COLORS.TEXT_PRIMARY,
     fontWeight: '700',
     fontSize: 16,
     textAlign: 'center',
   },
-  switchText: { 
+  switchText: {
     marginTop: 20,
     color: COLORS.SECONDARY,
     textAlign: 'center',
